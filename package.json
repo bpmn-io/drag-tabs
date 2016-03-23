@@ -1,0 +1,59 @@
+{
+  "name": "drag-tabs",
+  "version": "0.0.1",
+  "description": "A tab dragging component",
+  "main": "index.js",
+  "scripts": {
+    "test": "karma start",
+    "test:watch": "karma start --auto-watch --no-single-run",
+    "travis": "eslint *.js && npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/bpmn-io/drag-tabs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bpmn-io/drag-tabs/issues"
+  },
+  "keywords": [
+    "tabs",
+    "drag",
+    "component",
+    "browser",
+    "browserify"
+  ],
+  "author": {
+    "name": "Ricardo Matias",
+    "url": "https://github.com/ricardomatias"
+  },
+  "contributors": [
+    {
+      "name": "bpmn.io contributors",
+      "url": "https://github.com/bpmn-io"
+    }
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "browserify": "^13.0.0",
+    "chai": "^3.5.0",
+    "eslint": "^2.2.0",
+    "karma": "^0.13.21",
+    "karma-browserify": "^5.0.2",
+    "karma-mocha": "^0.2.2",
+    "karma-phantomjs-launcher": "^1.0.0",
+    "karma-sinon-chai": "^1.2.0",
+    "lolex": "^1.4.0",
+    "mocha": "^2.4.5",
+    "phantomjs-prebuilt": "^2.1.4",
+    "sinon": "^1.17.3",
+    "sinon-chai": "^2.8.0",
+    "watchify": "^3.7.0"
+  },
+  "dependencies": {
+    "events": "^1.1.0",
+    "inherits": "^2.0.1",
+    "lodash": "^3.10.1",
+    "min-dom": "^0.2.0",
+    "raf": "^3.2.0"
+  }
+}
