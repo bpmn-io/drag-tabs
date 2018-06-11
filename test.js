@@ -7,9 +7,12 @@ var domify = require('min-dom').domify;
 var TEST_MARKUP =
   '<div>' +
     '<ul class="my-tabs-container">' +
-      '<li class="my-tab i-am-active" data-id="A"></li>' +
-      '<li class="my-tab" data-id="B"></li>' +
-      '<li class="my-tab ignore-me" data-id="C"></li>' +
+      '<li class="my-tab i-am-active" data-id="A" style="display: inline-block">A</li>' +
+      '<li class="my-tab" data-id="B" style="display: inline-block">B</li>' +
+      '<li class="my-tab" data-id="C" style="display: inline-block">C</li>' +
+      '<li class="my-tab" data-id="D" style="display: inline-block">D</li>' +
+      '<li class="my-tab" data-id="E" style="display: inline-block">E</li>' +
+      '<li class="my-tab ignore-me" data-id="IGNORE" style="display: inline-block">IGNORE</li>' +
     '</ul>' +
   '</div>';
 
@@ -19,13 +22,15 @@ describe('dragTabs', function() {
 
   beforeEach(function() {
     node = domify(TEST_MARKUP);
+
+    document.body.appendChild(node);
   });
 
 
-  it('should create scroller', function() {
+  it('should create dragger', function() {
 
     // when
-    var scroller = dragTabs(node, {
+    var dragger = dragTabs(node, {
       selectors: {
         tabsContainer: '.my-tabs-container',
         tab: '.my-tab',
@@ -35,14 +40,14 @@ describe('dragTabs', function() {
     });
 
     // then
-    expect(scroller).to.exist;
+    expect(dragger).to.exist;
   });
 
 
   it('should act as singleton', function() {
 
     // given
-    var scroller = dragTabs(node, {
+    var dragger = dragTabs(node, {
       selectors: {
         tabsContainer: '.my-tabs-container',
         tab: '.my-tab',
@@ -52,10 +57,39 @@ describe('dragTabs', function() {
     });
 
     // when
-    var cachedScroller = dragTabs.get(node);
+    var cachedDragger = dragTabs.get(node);
 
     // then
-    expect(cachedScroller).to.equal(scroller);
+    expect(cachedDragger).to.equal(dragger);
+  });
+
+
+  it('should allow event registration', function() {
+
+    // given
+    var dragger = dragTabs(node, {
+      selectors: {
+        tabsContainer: '.my-tabs-container',
+        tab: '.my-tab',
+        ignore: '.ignore-me',
+        active: '.i-am-active'
+      }
+    });
+
+    // then
+    expect(function() {
+      dragger.on('drag', function() {
+        console.log('drag');
+      });
+
+      dragger.on('end', function() {
+        console.log('end');
+      });
+
+      dragger.on('cancel', function() {
+        console.log('cancel');
+      });
+    }).not.to.throw();
   });
 
 
