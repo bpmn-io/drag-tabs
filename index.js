@@ -1,17 +1,16 @@
 'use strict';
 
-var domMatches = require('min-dom/lib/matches'),
-    domDelegate = require('min-dom/lib/delegate'),
-    domQuery = require('min-dom/lib/query'),
-    domAttr = require('min-dom/lib/attr');
+var domMatches = require('min-dom').matches,
+    domDelegate = require('min-dom').delegate,
+    domQuery = require('min-dom').query,
+    domAttr = require('min-dom').attr;
 
-var forEach = require('lodash/collection/forEach'),
-    indexOf = require('lodash/array/indexOf'),
-    bind = require('lodash/function/bind');
+var forEach = require('min-dash').forEach,
+    bind = require('min-dash').bind;
 
 var inherits = require('inherits');
 
-var EventEmitter = require('events');
+var EventEmitter = require('mitt');
 
 var EFFECT_ALLOWED = 'move',
     DROP_EFFECT = 'move';
@@ -338,3 +337,11 @@ function get($el) {
  * Getter to retrieve an already initialized drag tabs instance.
  */
 module.exports.get = get;
+
+
+
+// helpers //////////////////
+
+function indexOf(nodeList, el) {
+  return Array.prototype.slice.call(nodeList).indexOf(el);
+}

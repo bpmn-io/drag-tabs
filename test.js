@@ -2,7 +2,7 @@
 
 var dragTabs = require('.');
 
-var domify = require('min-dom/lib/domify');
+var domify = require('min-dom').domify;
 
 var TEST_MARKUP =
   '<div>' +
