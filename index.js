@@ -3,6 +3,7 @@
 var domMatches = require('min-dom').matches,
     domDelegate = require('min-dom').delegate,
     domQuery = require('min-dom').query,
+    domQueryAll = require('min-dom').queryAll,
     domAttr = require('min-dom').attr;
 
 var forEach = require('min-dash').forEach,
@@ -128,7 +129,7 @@ DragTabs.prototype.getTabsContainerNode = function getTabsContainerNode() {
  * @return {Array<DOMElement>}
  */
 DragTabs.prototype.getAllTabNodes = function getAllTabNodes() {
-  return domQuery.all(this.options.selectors.tab, this.container);
+  return domQueryAll(this.options.selectors.tab, this.container);
 };
 
 
