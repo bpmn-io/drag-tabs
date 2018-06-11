@@ -7,11 +7,10 @@ var domMatches = require('min-dom').matches,
     domAttr = require('min-dom').attr;
 
 var forEach = require('min-dash').forEach,
+    assign = require('min-dash').assign,
     bind = require('min-dash').bind;
 
-var inherits = require('inherits');
-
-var EventEmitter = require('mitt');
+var createEmitter = require('mitt');
 
 var EFFECT_ALLOWED = 'move',
     DROP_EFFECT = 'move';
@@ -92,15 +91,13 @@ var THRESHOLD = 30;
  */
 function DragTabs($el, options) {
   // we are an event emitter
-  EventEmitter.call(this);
+  assign(this, createEmitter());
 
   this.options = options || {};
   this.container = $el;
 
   this._bindEvents($el);
 }
-
-inherits(DragTabs, EventEmitter);
 
 
 /**
