@@ -97,6 +97,7 @@ function DragTabs($el, options) {
   this.container = $el;
 
   this._bindEvents($el);
+  this.update();
 }
 
 
