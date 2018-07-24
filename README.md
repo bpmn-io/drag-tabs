@@ -2,7 +2,6 @@
 
 # drag-tabs
 
-
 [![Build Status](https://travis-ci.org/bpmn-io/drag-tabs.svg?branch=master)](https://travis-ci.org/bpmn-io/drag-tabs)
 
 A tiny utility that adds the infrastructure required to move tabs around by dragging.
@@ -26,8 +25,8 @@ The three events are emitted with the following context:
 
 ```js
 var context = {
-	dragTab: {HTMLElement},
-	newIndex: {Number}
+  dragTab: {HTMLElement},
+  newIndex: {Number}
 };
 ```
 
@@ -60,11 +59,7 @@ var drager = dragTabs($el, {
 });
 ```
 
-<<<<<<< HEAD
 ### Listen to the drag event
-=======
-### Listen to the scroll event
->>>>>>> 0c68a2d... chore(project): migrate to ES modules
 
 ```javascript
 drager.on('drag', function(context) {
