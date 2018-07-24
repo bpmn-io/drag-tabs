@@ -50,7 +50,7 @@ var $el = (
 ### Initialize dragTabs
 
 ```javascript
-var drager = dragTabs($el, {
+var dragger = dragTabs($el, {
   selectors: {
     tabsContainer: '.my-tabs-container',
     tab: '.my-tab',
@@ -62,7 +62,7 @@ var drager = dragTabs($el, {
 ### Listen to the drag event
 
 ```javascript
-drager.on('drag', function(context) {
+dragger.on('drag', function(context) {
     var dragTab = context.dragTab,
         newIdx = context.newIdx;
 
@@ -70,7 +70,7 @@ drager.on('drag', function(context) {
 });
 
 // move the tab to the initial position
-drager.on('cancel', function(context) {});
+dragger.on('cancel', function(context) {});
 ```
 
 ### Update dragger
