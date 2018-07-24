@@ -1,23 +1,9 @@
 {
-  "rules": {
-    "indent": [ 2, 2, { "VariableDeclarator": { "var": 2, "let": 2, "const": 3 } } ],
-    "no-unused-vars": [ 2, { "args": "none" } ],
-    "quotes": [ 2, "single" ],
-    "semi": [ 2, "always" ],
-    "no-console": 0
-  },
+  "extends": [
+    "plugin:bpmn-io/es6",
+    "plugin:bpmn-io/mocha"
+  ],
   "env": {
-    "browser": true,
-    "node": true
-  },
-  "extends": "eslint:recommended",
-  "globals": {
-    "expect": false,
-    "it": false,
-    "describe": false,
-    "beforeEach": true,
-    "afterEach": true,
-    "before": true,
-    "after": true
+    "browser": true
   }
 }

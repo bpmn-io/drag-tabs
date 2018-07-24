@@ -1,8 +1,8 @@
-'use strict';
+import dragTabs from '.';
 
-var dragTabs = require('.');
-
-var domify = require('min-dom').domify;
+import {
+  domify
+} from 'min-dom';
 
 var TEST_MARKUP =
   '<div>' +
@@ -15,6 +15,7 @@ var TEST_MARKUP =
       '<li class="my-tab ignore-me" data-id="IGNORE" style="display: inline-block">IGNORE</li>' +
     '</ul>' +
   '</div>';
+
 
 describe('dragTabs', function() {
 

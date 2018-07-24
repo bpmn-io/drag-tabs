@@ -1,9 +1,7 @@
-'use strict';
-
 // configures browsers to run test against
-// any of [ 'ChromeHeadless', 'Chrome', 'Firefox', 'IE' ]
+// any of [ 'ChromeHeadless', 'PhantomJS', 'Chrome', 'Firefox', 'IE' ]
 var browsers =
-  (process.env.TEST_BROWSERS || 'ChromeHeadless')
+  (process.env.TEST_BROWSERS || 'PhantomJS')
     .replace(/^\s+|\s+$/, '')
     .split(/\s*,\s*/g)
     .map(function(browser) {
@@ -23,7 +21,6 @@ module.exports = function(karma) {
   karma.set({
 
     frameworks: [
-      'browserify',
       'mocha',
       'sinon-chai'
     ],
@@ -33,7 +30,7 @@ module.exports = function(karma) {
     ],
 
     preprocessors: {
-      'test.js': [ 'browserify' ]
+      'test.js': [ 'webpack' ]
     },
 
     reporters: [ 'dots' ],
@@ -54,8 +51,8 @@ module.exports = function(karma) {
     singleRun: true,
     autoWatch: false,
 
-    browserify: {
-      debug: true
+    webpack: {
+      mode: 'development'
     }
   });
 };

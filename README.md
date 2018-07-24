@@ -1,3 +1,5 @@
+> As of version `1.0.0` this library exposes ES modules. Use an ES module aware transpiler such as Webpack, Rollup or Browserify + babelify to bundle it for the browser.
+
 # drag-tabs
 
 > This component provides the infrastructure needed to move tabs around by dragging.
@@ -52,7 +54,11 @@ var drager = dragTabs($el, {
 });
 ```
 
+<<<<<<< HEAD
 ### Listen to the drag event
+=======
+### Listen to the scroll event
+>>>>>>> 0c68a2d... chore(project): migrate to ES modules
 
 ```javascript
 drager.on('drag', function(context) {

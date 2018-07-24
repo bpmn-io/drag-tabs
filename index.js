@@ -1,16 +1,19 @@
-'use strict';
+import {
+  matches as domMatches,
+  delegate as domDelegate,
+  query as domQuery,
+  queryAll as domQueryAll,
+  attr as domAttr
+} from 'min-dom';
 
-var domMatches = require('min-dom').matches,
-    domDelegate = require('min-dom').delegate,
-    domQuery = require('min-dom').query,
-    domQueryAll = require('min-dom').queryAll,
-    domAttr = require('min-dom').attr;
+import {
+  forEach,
+  assign,
+  bind,
+  isNumber
+} from 'min-dash';
 
-var forEach = require('min-dash').forEach,
-    assign = require('min-dash').assign,
-    bind = require('min-dash').bind;
-
-var createEmitter = require('mitt');
+import createEmitter from 'mitt';
 
 var EFFECT_ALLOWED = 'move',
     DROP_EFFECT = 'move';
@@ -141,6 +144,12 @@ DragTabs.prototype._setDraggable = function _setDraggable() {
   var ignore = this.options.selectors.ignore;
 
   forEach(allTabs, function(tabNode) {
+
+    // PhantomJS issue
+    if (isNumber(tabNode)) {
+      return;
+    }
+
     if (domMatches(tabNode, ignore)) {
       domAttr(tabNode, 'draggable', false);
     } else {
@@ -304,7 +313,9 @@ DragTabs.prototype._onDrop = function _onDrop(event) {
 };
 
 
-function create($el, options) {
+// exports //////////////////
+
+export default function create($el, options) {
 
   var dragTabs = get($el);
 
@@ -316,9 +327,6 @@ function create($el, options) {
 
   return dragTabs;
 }
-
-module.exports = create;
-
 
 /**
  * Return the dragTabs instance that has been previously
@@ -335,7 +343,7 @@ function get($el) {
 /**
  * Getter to retrieve an already initialized drag tabs instance.
  */
-module.exports.get = get;
+create.get = get;
 
 
 
