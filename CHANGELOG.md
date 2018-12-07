@@ -6,6 +6,18 @@ All notable changes to [drag-tabs](https://github.com/bpmn-io/drag-tabs) are doc
 
 ___Note:__ Yet to be released changes appear here._
 
+## 1.0.3
+
+* `FIX`: remove unused `raf` dependency and move `puppeteer` to dev dependencies
+
+## 1.0.2
+
+* `FIX`: add missing `.babelrc`
+
+## 1.0.1
+
+* `DOCS`: fix typo and merge error
+
 ## 1.0.0
 
 ### Breaking Changes
