@@ -20,31 +20,7 @@ A tiny utility that makes tabs inside a container draggable.
 
 ## How it Works
 
-It's not this component's responsibility to the actual moving of the tab, but exposing an event based
-interface that communicates when and where the tab dragging should happen.
-
-It makes sure all the tabs inside the intended container are draggable,
-ignoring the ones that are declared as so.
-
-The component is an event emitter and it emits the following events:
-
-- `drag`: fired every time there is a new position
-- `end`: always fired at the end of the drag
-- `cancel`: only fired when the dragging is canceled
-
-The three events are emitted with the following context:
-
-```js
-var context = {
-  dragTab: {HTMLElement},
-  newIndex: {Number}
-};
-```
-
-
-## How to Use
-
-### Provide a Tab Container
+Given you got an element with the following HTML markup:
 
 ```javascript
 var $el = (
@@ -58,7 +34,7 @@ var $el = (
 );
 ```
 
-### Initialize dragTabs
+Create the dragger:
 
 ```javascript
 var dragger = dragTabs($el, {
@@ -70,7 +46,7 @@ var dragger = dragTabs($el, {
 });
 ```
 
-### Listen to the Drag Event
+Listen to drag events emitted via the `DragTabs` instance and use the updates to move the tabs to the appropriate position:
 
 ```javascript
 dragger.on('drag', function(context) {
@@ -84,13 +60,43 @@ dragger.on('drag', function(context) {
 dragger.on('cancel', function(context) {});
 ```
 
-### Update Dragger
 
-Every time tabs change, update the dragger:
+## Emitted Events
+
+The `DragTabs` instance is an event emitter that fires the following events:
+
+- `start`: tab dragging starts
+- `drag`: fired on every position update
+- `end`: always fired at the end of the drag
+- `cancel`: only fired when the dragging is canceled
+
+The events `drag`, `end` and `cancel` are emitted with the following context:
+
+```js
+{
+  dragTab: {HTMLElement},
+  newIndex: {Number}
+}
+```
+
+The event `start` is fired with the following context:
+
+```js
+{
+  dragTab: {HTMLElement},
+  initialIndex: {Number}
+}
+```
+
+
+## Manually Update Dragger
+
+To trigger a manual update on the `DragTabs` instance, i.e. because the displayed tabs change call `DragTabs#update`:
 
 ```javascript
 dragger.update();
 ```
+
 
 ## How to Test
 
