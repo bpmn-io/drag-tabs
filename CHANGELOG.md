@@ -6,6 +6,19 @@ All notable changes to [drag-tabs](https://github.com/bpmn-io/drag-tabs) are doc
 
 ___Note:__ Yet to be released changes appear here._
 
+## 2.0.0
+
+* `FEAT`: emit start event (`{ dragTab, initialIndex }`)
+* `FEAT`: lazy bind drag events
+* `CHORE`: improve dragging from left to right
+* `CHORE`: simplify implementation
+* `CHORE`: drop `options.thresold`
+* `FIX`: support Firefox
+
+#### Breaking Changes
+
+* `options.threshold` has been removed without replacement
+
 ## 1.0.3
 
 * `FIX`: remove unused `raf` dependency and move `puppeteer` to dev dependencies
