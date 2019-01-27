@@ -6,6 +6,13 @@ All notable changes to [drag-tabs](https://github.com/bpmn-io/drag-tabs) are doc
 
 ___Note:__ Yet to be released changes appear here._
 
+## 2.1.0
+
+* `DOCS`: improve documentation
+* `CHORE`: mark as side-effect free
+* `CHORE`: expose `module` field to allow tree shaking
+* `CHORE`: remove internal `DragTabs#get` API
+
 ## 2.0.0
 
 * `FEAT`: emit start event (`{ dragTab, initialIndex }`)
