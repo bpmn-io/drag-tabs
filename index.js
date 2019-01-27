@@ -1,6 +1,6 @@
 import {
   matches as domMatches,
-  delegate as domDelegate,
+  event as domEvent,
   query as domQuery,
   queryAll as domQueryAll,
   attr as domAttr
@@ -15,10 +15,8 @@ import {
 
 import createEmitter from 'mitt';
 
-var EFFECT_ALLOWED = 'move',
-    DROP_EFFECT = 'move';
-
-var THRESHOLD = 30;
+var EFFECT_ALLOWED = 'move';
+var DROP_EFFECT = 'move';
 
 
 /**
@@ -90,16 +88,22 @@ var THRESHOLD = 30;
  * @param  {String} options.selectors.tabsContainer the container all tabs are contained in
  * @param  {String} options.selectors.tab a single tab inside the tab container
  * @param  {String} options.selectors.ignore tabs that should be ignored during scroll left/right
- * @param  {Number} options.threshold affects when a smaller tab should be dragged over a bigger one
  */
 function DragTabs($el, options) {
   // we are an event emitter
   assign(this, createEmitter());
 
   this.options = options || {};
-  this.container = $el;
+  this.$el = $el;
 
-  this._bindEvents($el);
+  this._moveTab = bind(this._moveTab, this);
+
+  this._onDragstart = bind(this._onDragstart, this);
+  this._onDragend = bind(this._onDragend, this);
+  this._onDrop = bind(this._onDrop, this);
+
+  this._init();
+
   this.update();
 }
 
@@ -109,8 +113,8 @@ function DragTabs($el, options) {
  *
  * @return {DOMElement}
  */
-DragTabs.prototype.getActiveTabNode = function getActiveTabNode() {
-  return domQuery(this.options.selectors.active, this.container);
+DragTabs.prototype.getActiveTabNode = function() {
+  return domQuery(this.options.selectors.active, this.$el);
 };
 
 
@@ -119,8 +123,8 @@ DragTabs.prototype.getActiveTabNode = function getActiveTabNode() {
  *
  * @return {DOMElement}
  */
-DragTabs.prototype.getTabsContainerNode = function getTabsContainerNode() {
-  return domQuery(this.options.selectors.tabsContainer, this.container);
+DragTabs.prototype.getTabsContainerNode = function() {
+  return domQuery(this.options.selectors.tabsContainer, this.$el);
 };
 
 
@@ -129,8 +133,8 @@ DragTabs.prototype.getTabsContainerNode = function getTabsContainerNode() {
  *
  * @return {Array<DOMElement>}
  */
-DragTabs.prototype.getAllTabNodes = function getAllTabNodes() {
-  return domQueryAll(this.options.selectors.tab, this.container);
+DragTabs.prototype.getAllTabNodes = function() {
+  return domQueryAll(this.options.selectors.tab, this.$el);
 };
 
 
@@ -138,7 +142,7 @@ DragTabs.prototype.getAllTabNodes = function getAllTabNodes() {
  * Sets draggable attribute for all tabs.
  * Has ignored tabs into account.
  */
-DragTabs.prototype._setDraggable = function _setDraggable() {
+DragTabs.prototype._setDraggable = function() {
   var allTabs = this.getAllTabNodes();
 
   var ignore = this.options.selectors.ignore;
@@ -172,26 +176,16 @@ DragTabs.prototype.update = function() {
  *
  * @param {DOMElement}
  */
-DragTabs.prototype._bindEvents = function _bindEvents(node) {
-  var tabContainerSel = this.options.selectors.tabsContainer;
-
-  domDelegate.bind(node, tabContainerSel, 'dragstart', bind(this._onDragstart, this));
-
-  domDelegate.bind(node, tabContainerSel, 'dragenter', bind(this._preventDefaults, this));
-  domDelegate.bind(node, tabContainerSel, 'dragover', bind(this._moveTab, this));
-  domDelegate.bind(node, tabContainerSel, 'dragleave', bind(this._preventDefaults, this));
-
-  domDelegate.bind(node, tabContainerSel, 'dragend', bind(this._onDragend, this));
-
-  domDelegate.bind(node, tabContainerSel, 'drop', bind(this._onDrop, this));
+DragTabs.prototype._init = function() {
+  this._bind('dragstart', this._onDragstart, this.$el);
 };
 
+DragTabs.prototype._bind = function(eventName, fn, parent) {
+  domEvent.bind(parent || document.body, eventName, fn);
+};
 
-DragTabs.prototype._preventDefaults = function _preventDefaults(event) {
-  event.preventDefault();
-  event.stopPropagation();
-
-  return false;
+DragTabs.prototype._unbind = function(eventName, fn, parent) {
+  domEvent.unbind(parent || document.body, eventName, fn);
 };
 
 
@@ -202,42 +196,64 @@ DragTabs.prototype._preventDefaults = function _preventDefaults(event) {
  *
  * @return {Boolean} False
  */
-DragTabs.prototype._moveTab = function _moveTab(event) {
+DragTabs.prototype._moveTab = function(event) {
   var context = this._context,
-      threshold = this.options.threshold || THRESHOLD,
+      initialIndex = context.initialIndex,
       tabContainer = this.getTabsContainerNode();
+
+  var currentIndex = 'newIndex' in context ? context.newIndex : initialIndex;
 
   var target = event.target,
       dragTab = context.dragTab,
-      targetIdx, lowerBounds, upperBounds;
+
+      newIndex;
 
   if (!domAttr(target, 'draggable') || !target.draggable || target === dragTab) {
-    return this._preventDefaults(event);
+    return cancelEvent(event);
   }
 
-  var diffSize = target.clientWidth - dragTab.clientWidth;
+  // we emit a drag update only if:
+  //
+  // (1) the actual tab order changed
+  // (2) the change is stable, i.e. the tabs would not immediately
+  //     swap back (if we drag a smaller element over a bigger one)
+  //
+  var targetWidth = target.offsetWidth;
 
-  if (diffSize > 0) {
-    diffSize = diffSize / 2;
+  // do not emit drag event, unless the result is stable, i.e. it
+  // would not immediately swap back (when dragging a small element
+  // over a bigger one)
+  var delta = targetWidth - dragTab.offsetWidth;
 
-    lowerBounds = target.offsetLeft + diffSize + threshold;
-    upperBounds = target.offsetLeft + target.clientWidth - diffSize - threshold;
+  var offset;
 
-    if (Math.max(lowerBounds, event.clientX) === lowerBounds || Math.min(upperBounds, event.clientX) === upperBounds) {
-      return this._preventDefaults(event);
+  if (delta > 0) {
+    offset = delta / 2;
+
+    // we'd see a
+    if (offset > event.offsetX || (targetWidth - offset) < event.offsetX) {
+      return cancelEvent(event);
     }
   }
 
-  targetIdx = indexOf(tabContainer.children, target);
+  newIndex = indexOf(tabContainer.children, target);
 
-  context.newIndex = targetIdx;
+  // swap elements, if we drag from left to right
+  if (target.offsetLeft > dragTab.offsetLeft) {
+    newIndex++;
+  }
 
-  this.emit('drag', {
-    dragTab: dragTab,
-    newIndex: targetIdx
-  });
+  if (newIndex !== currentIndex) {
+    context.newIndex = newIndex;
 
-  return this._preventDefaults(event);
+    this.emit('drag', {
+      dragTab: dragTab,
+      newIndex: newIndex
+    });
+
+  }
+
+  return cancelEvent(event);
 };
 
 
@@ -246,26 +262,36 @@ DragTabs.prototype._moveTab = function _moveTab(event) {
  *
  * @param  {DOMEvent} event
  */
-DragTabs.prototype._onDragstart = function _onDragstart(event) {
-  var container = this.container;
+DragTabs.prototype._onDragstart = function(event) {
+  var $el = this.$el;
 
   var tabContainer = this.getTabsContainerNode(),
       target = event.target;
 
   // disallow the drag on tabs that don't allow it
   if (!target.draggable) {
-    return this._preventDefaults(event);
+    return cancelEvent(event);
   }
 
-  this._dropped = false;
+  var initialIndex = indexOf(tabContainer.children, target);
 
   this._context = {
     dragTab: target,
-    initialIdx: indexOf(tabContainer.children, target)
+    initialIndex: initialIndex
   };
 
-  // add a class to the container while the dragging is active
-  container.classList.add('dragging-active');
+  this.emit('start', this._context);
+
+  // register drag events
+  this._bind('dragenter', cancelEvent);
+  this._bind('dragleave', cancelEvent);
+  this._bind('dragover', this._moveTab);
+  this._bind('dragend', this._onDragend);
+
+  this._bind('drop', this._onDrop);
+
+  // add a class to the dragger el to indicate dragging is active
+  $el.classList.add('dragging-active');
 
   event.dataTransfer.dropEffect = DROP_EFFECT;
   event.dataTransfer.effectAllowed = EFFECT_ALLOWED;
@@ -276,30 +302,40 @@ DragTabs.prototype._onDragstart = function _onDragstart(event) {
  * Makes sure to broadcast the initial dragging tab's position,
  * if the dragging was canceled.
  *
- * @param  {DOMEvent} event
+ * @param {DOMEvent} event
  */
-DragTabs.prototype._onDragend = function _onDragend(event) {
-  var container = this.container,
+DragTabs.prototype._onDragend = function(event) {
+  var $el = this.$el,
       context = this._context,
-      dropped = this._dropped;
+      dropped = context.dropped;
 
   // cleanup the added active class
-  container.classList.remove('dragging-active');
+  $el.classList.remove('dragging-active');
+
+  // de-register drag events
+  this._unbind('dragenter', cancelEvent);
+  this._unbind('dragleave', cancelEvent);
+  this._unbind('dragover', this._moveTab);
+  this._unbind('dragend', this._onDragend);
+
+  this._unbind('drop', this._onDrop);
 
   this.emit('end', {
     dragTab: context.dragTab,
     newIndex: context.newIndex
   });
 
-  if (dropped) {
-    return;
+  if (!dropped) {
+
+    // if this is a cancel, send the relevant information
+    // to allow listeners to restore the tab's position
+    this.emit('cancel', {
+      dragTab: context.dragTab,
+      newIndex: context.initialIndex
+    });
   }
 
-  // on cancel send the relevant information to restore the tab's position
-  this.emit('cancel', {
-    dragTab: context.dragTab,
-    newIndex: context.initialIdx
-  });
+  this._context = null;
 };
 
 
@@ -308,8 +344,8 @@ DragTabs.prototype._onDragend = function _onDragend(event) {
  *
  * @param  {DOMEvent} event
  */
-DragTabs.prototype._onDrop = function _onDrop(event) {
-  this._dropped = true;
+DragTabs.prototype._onDrop = function(event) {
+  this._context.dropped = true;
 };
 
 
@@ -351,4 +387,11 @@ create.get = get;
 
 function indexOf(nodeList, el) {
   return Array.prototype.slice.call(nodeList).indexOf(el);
+}
+
+function cancelEvent(event) {
+  event.preventDefault();
+  event.stopPropagation();
+
+  return false;
 }
