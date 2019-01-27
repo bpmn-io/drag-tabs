@@ -68,7 +68,7 @@ describe('dragTabs', function() {
     });
 
     // when
-    var cachedDragger = dragTabs.get(node);
+    var cachedDragger = dragTabs(node, false);
 
     // then
     expect(cachedDragger).to.equal(dragger);

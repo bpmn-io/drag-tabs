@@ -355,11 +355,19 @@ DragTabs.prototype._onDrop = function(event) {
 
 // exports //////////////////
 
+/**
+ * Get or create the dragTabs instance bound to $el.
+ *
+ * @param {DOMElement} $el
+ * @param {Object|Boolean} options
+ *
+ * @return {DragTabs}
+ */
 export default function create($el, options) {
 
   var dragTabs = get($el);
 
-  if (!dragTabs) {
+  if (!dragTabs && options !== false) {
     dragTabs = new DragTabs($el, options);
 
     $el.__dragTabs = dragTabs;
@@ -379,11 +387,6 @@ export default function create($el, options) {
 function get($el) {
   return $el.__dragTabs;
 }
-
-/**
- * Getter to retrieve an already initialized drag tabs instance.
- */
-create.get = get;
 
 
 
