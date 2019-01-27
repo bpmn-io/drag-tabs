@@ -238,11 +238,6 @@ DragTabs.prototype._moveTab = function(event) {
 
   newIndex = indexOf(tabContainer.children, target);
 
-  // swap elements, if we drag from left to right
-  if (target.offsetLeft > dragTab.offsetLeft) {
-    newIndex++;
-  }
-
   if (newIndex !== currentIndex) {
     context.newIndex = newIndex;
 
