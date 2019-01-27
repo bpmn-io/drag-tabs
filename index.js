@@ -295,6 +295,10 @@ DragTabs.prototype._onDragstart = function(event) {
 
   event.dataTransfer.dropEffect = DROP_EFFECT;
   event.dataTransfer.effectAllowed = EFFECT_ALLOWED;
+
+  // make dragging work in Firefox
+  // must be set to 'text' for IE11 compatibility
+  event.dataTransfer.setData('text', '');
 };
 
 
