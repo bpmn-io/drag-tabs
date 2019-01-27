@@ -4,15 +4,25 @@ import {
   domify
 } from 'min-dom';
 
+
+insertCSS('test',
+  '.my-tab { display: inline-block; text-align: center; margin-right: 5px; }'
+);
+
 var TEST_MARKUP =
   '<div>' +
     '<ul class="my-tabs-container">' +
-      '<li class="my-tab i-am-active" data-id="A" style="display: inline-block">A</li>' +
-      '<li class="my-tab" data-id="B" style="display: inline-block">B</li>' +
-      '<li class="my-tab" data-id="C" style="display: inline-block">C</li>' +
-      '<li class="my-tab" data-id="D" style="display: inline-block">D</li>' +
-      '<li class="my-tab" data-id="E" style="display: inline-block">E</li>' +
-      '<li class="my-tab ignore-me" data-id="IGNORE" style="display: inline-block">IGNORE</li>' +
+      '<li class="my-tab i-am-active" style="width: 30px; background: lightblue">A</li>' +
+      '<li class="my-tab" style="width: 15px; background: green">B</li>' +
+      '<li class="my-tab" style="width: 50px; background: yellow">C</li>' +
+      '<li class="my-tab" style="width: 80px; background: orange">D</li>' +
+      '<li class="my-tab" style="width: 50px; background: fuchsia">E</li>' +
+      '<li class="my-tab" style="width: 80px; background: lightgreen">F</li>' +
+      '<li class="my-tab" style="width: 80px; background: lime">G</li>' +
+      '<li class="my-tab" style="width: 80px; background: red">H</li>' +
+      '<li class="my-tab" style="width: 80px; background: aliceblue">I</li>' +
+      '<li class="my-tab" style="width: 80px; background: cadetblue">J</li>' +
+      '<li class="my-tab ignore-me" style="width: 80px; background: grey">IGNORE</li>' +
     '</ul>' +
   '</div>';
 
@@ -65,7 +75,7 @@ describe('dragTabs', function() {
   });
 
 
-  it('should allow event registration', function() {
+  it('should emit events', function() {
 
     // given
     var dragger = dragTabs(node, {
@@ -77,20 +87,31 @@ describe('dragTabs', function() {
       }
     });
 
+    function logger(name) {
+
+      return function(obj) {
+        console.log(name, 'newIndex' in obj ? obj.newIndex : obj.initialIndex);
+      };
+
+    }
+
     // then
     expect(function() {
-      dragger.on('drag', function() {
-        console.log('drag');
-      });
+      dragger.on('start', logger('start'));
+      dragger.on('drag', logger('drag'));
+      dragger.on('end', logger('end'));
+      dragger.on('cancel', logger('cancel'));
 
-      dragger.on('end', function() {
-        console.log('end');
-      });
+      dragger.on('drag', function(event) {
+        var newIndex = event.newIndex;
+        var dragTab = event.dragTab;
 
-      dragger.on('cancel', function() {
-        console.log('cancel');
+        var parentNode = dragTab.parentNode;
+
+        parentNode.insertBefore(dragTab, parentNode.children[newIndex]);
       });
     }).not.to.throw();
+
   });
 
 
@@ -99,3 +120,26 @@ describe('dragTabs', function() {
   it('update');
 
 });
+
+
+
+// helpers //////////////////////
+
+function insertCSS(name, css) {
+  if (document.querySelector('[data-css-file="' + name + '"]')) {
+    return;
+  }
+
+  var head = document.head || document.getElementsByTagName('head')[0],
+      style = document.createElement('style');
+  style.setAttribute('data-css-file', name);
+
+  style.type = 'text/css';
+  if (style.styleSheet) {
+    style.styleSheet.cssText = css;
+  } else {
+    style.appendChild(document.createTextNode(css));
+  }
+
+  head.appendChild(style);
+}
