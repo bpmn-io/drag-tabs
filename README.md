@@ -6,7 +6,7 @@
 
 A tiny utility that makes tabs inside a container draggable.
 
-![drag-tabs in action](screencast.gif)
+<img src="https://raw.githubusercontent.com/bpmn-io/drag-tabs/master/screencast.gif" alt="drag-tabs in action" height="50">
 
 
 ## Features
