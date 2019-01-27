@@ -4,10 +4,19 @@
 
 [![Build Status](https://travis-ci.org/bpmn-io/drag-tabs.svg?branch=master)](https://travis-ci.org/bpmn-io/drag-tabs)
 
-A tiny utility that adds the infrastructure required to move tabs around by dragging.
+A tiny utility that makes tabs inside a container draggable.
 
 
-## How it works
+## Features
+
+* Makes elements inside a drag container draggable
+* Supports ignored elements
+* Emits `drag`, `start`, `cancel` and `end` events
+* Does not perform actual dragging
+* Singleton (per element)
+
+
+## How it Works
 
 It's not this component's responsibility to the actual moving of the tab, but exposing an event based
 interface that communicates when and where the tab dragging should happen.
@@ -31,9 +40,9 @@ var context = {
 ```
 
 
-## How to use
+## How to Use
 
-### Provide a tab container
+### Provide a Tab Container
 
 ```javascript
 var $el = (
@@ -59,7 +68,7 @@ var dragger = dragTabs($el, {
 });
 ```
 
-### Listen to the drag event
+### Listen to the Drag Event
 
 ```javascript
 dragger.on('drag', function(context) {
@@ -73,7 +82,7 @@ dragger.on('drag', function(context) {
 dragger.on('cancel', function(context) {});
 ```
 
-### Update dragger
+### Update Dragger
 
 Every time tabs change, update the dragger:
 
@@ -81,7 +90,7 @@ Every time tabs change, update the dragger:
 dragger.update();
 ```
 
-## How to test
+## How to Test
 
 ```
 npm run test
