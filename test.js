@@ -95,6 +95,17 @@ describe('dragTabs', function() {
 
     }
 
+    function moveTab(event) {
+      var newIndex = event.newIndex;
+      var dragTab = event.dragTab;
+
+      var parentNode = dragTab.parentNode;
+
+      parentNode.removeChild(dragTab);
+
+      parentNode.insertBefore(dragTab, parentNode.children[newIndex]);
+    }
+
     // then
     expect(function() {
       dragger.on('start', logger('start'));
@@ -102,14 +113,8 @@ describe('dragTabs', function() {
       dragger.on('end', logger('end'));
       dragger.on('cancel', logger('cancel'));
 
-      dragger.on('drag', function(event) {
-        var newIndex = event.newIndex;
-        var dragTab = event.dragTab;
-
-        var parentNode = dragTab.parentNode;
-
-        parentNode.insertBefore(dragTab, parentNode.children[newIndex]);
-      });
+      dragger.on('drag', moveTab);
+      dragger.on('cancel', moveTab);
     }).not.to.throw();
 
   });
