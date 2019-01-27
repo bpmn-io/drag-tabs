@@ -34,6 +34,7 @@
       "url": "https://github.com/bpmn-io"
     }
   ],
+  "sideEffects": false,
   "license": "MIT",
   "devDependencies": {
     "chai": "^4.2.0",
