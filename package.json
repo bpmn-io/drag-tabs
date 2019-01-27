@@ -3,6 +3,7 @@
   "version": "2.0.0",
   "description": "A tab dragging component",
   "main": "index.js",
+  "module": "index.js",
   "scripts": {
     "all": "run-s lint test",
     "lint": "eslint .",
