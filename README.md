@@ -6,6 +6,8 @@
 
 A tiny utility that makes tabs inside a container draggable.
 
+![drag-tabs in action](screencast.gif)
+
 
 ## Features
 
