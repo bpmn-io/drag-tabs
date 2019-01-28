@@ -6,6 +6,10 @@ All notable changes to [drag-tabs](https://github.com/bpmn-io/drag-tabs) are doc
 
 ___Note:__ Yet to be released changes appear here._
 
+## 2.1.2
+
+* `FIX`: check containment when dragging tabs
+
 ## 2.1.1
 
 * `FIX`: correct left to right dragging

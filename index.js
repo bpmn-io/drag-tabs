@@ -208,7 +208,12 @@ DragTabs.prototype._moveTab = function(event) {
 
       newIndex;
 
-  if (!domAttr(target, 'draggable') || !target.draggable || target === dragTab) {
+  if (
+    !tabContainer.contains(target) ||
+    !domAttr(target, 'draggable') ||
+    !target.draggable ||
+    target === dragTab
+  ) {
     return cancelEvent(event);
   }
 
