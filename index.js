@@ -88,6 +88,7 @@ var DROP_EFFECT = 'move';
  * @param  {String} options.selectors.tabsContainer the container all tabs are contained in
  * @param  {String} options.selectors.tab a single tab inside the tab container
  * @param  {String} options.selectors.ignore tabs that should be ignored during scroll left/right
+ * @param  {String} [options.showPreview=true] whether to show or hide the drag preview
  */
 function DragTabs($el, options) {
   // we are an event emitter
@@ -265,6 +266,8 @@ DragTabs.prototype._moveTab = function(event) {
 DragTabs.prototype._onDragstart = function(event) {
   var $el = this.$el;
 
+  var options = this.options;
+
   var tabContainer = this.getTabsContainerNode(),
       target = event.target;
 
@@ -293,8 +296,14 @@ DragTabs.prototype._onDragstart = function(event) {
   // add a class to the dragger el to indicate dragging is active
   $el.classList.add('dragging-active');
 
-  event.dataTransfer.dropEffect = DROP_EFFECT;
-  event.dataTransfer.effectAllowed = EFFECT_ALLOWED;
+  var dataTransfer = event.dataTransfer;
+
+  dataTransfer.dropEffect = DROP_EFFECT;
+  dataTransfer.effectAllowed = EFFECT_ALLOWED;
+
+  if (options.showPreview === false && 'setDragImage' in dataTransfer) {
+    dataTransfer.setDragImage(emptyImage(), 0, 0);
+  }
 
   // make dragging work in Firefox
   // must be set to 'text' for IE11 compatibility
@@ -401,4 +410,10 @@ function cancelEvent(event) {
   event.stopPropagation();
 
   return false;
+}
+
+function emptyImage() {
+  var img = document.createElement('img');
+  img.src = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+  return img;
 }

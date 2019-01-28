@@ -6,6 +6,10 @@ All notable changes to [drag-tabs](https://github.com/bpmn-io/drag-tabs) are doc
 
 ___Note:__ Yet to be released changes appear here._
 
+## 2.3.0
+
+* `FEAT`: add ability to suppress drag image
+
 ## 2.2.0
 
 * `FIX`: check containment when dragging tabs

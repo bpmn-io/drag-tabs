@@ -55,6 +55,24 @@ describe('dragTabs', function() {
   });
 
 
+  it('should create without drag preview', function() {
+
+    // when
+    var dragger = dragTabs(node, {
+      selectors: {
+        tabsContainer: '.my-tabs-container',
+        tab: '.my-tab',
+        ignore: '.ignore-me',
+        active: '.i-am-active'
+      },
+      showPreview: false
+    });
+
+    // then
+    expect(dragger).to.exist;
+  });
+
+
   it('should act as singleton', function() {
 
     // given
