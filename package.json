@@ -1,6 +1,6 @@
 {
   "name": "drag-tabs",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "A tab dragging component",
   "main": "index.js",
   "module": "index.js",
