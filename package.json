@@ -4,6 +4,9 @@
   "description": "A tab dragging component",
   "main": "index.js",
   "module": "index.js",
+  "files": [
+    "index.js"
+  ],
   "scripts": {
     "all": "run-s lint test",
     "lint": "eslint .",
@@ -38,24 +41,25 @@
   "license": "MIT",
   "devDependencies": {
     "chai": "^4.2.0",
-    "eslint": "^5.2.0",
-    "eslint-plugin-bpmn-io": "^0.5.3",
+    "eslint": "^8.44.0",
+    "eslint-plugin-bpmn-io": "^1.0.0",
     "karma": "^3.1.4",
+    "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^2.2.0",
+    "karma-firefox-launcher": "^2.1.2",
     "karma-mocha": "^0.2.2",
-    "karma-phantomjs-launcher": "^1.0.4",
     "karma-sinon-chai": "^2.0.2",
-    "karma-webpack": "^3.0.5",
+    "karma-webpack": "^5.0.0",
     "mocha": "^5.2.0",
     "npm-run-all": "^4.1.5",
-    "puppeteer": "^1.11.0",
+    "puppeteer": "^20.8.2",
     "sinon": "^7.2.3",
     "sinon-chai": "^3.3.0",
-    "webpack": "^4.29.0"
+    "webpack": "^5.88.1"
   },
   "dependencies": {
-    "min-dash": "^3.1.0",
-    "min-dom": "^3.1.0",
-    "mitt": "^1.1.3"
+    "min-dash": "^4.1.1",
+    "min-dom": "^4.1.0",
+    "mitt": "^3.0.1"
   }
 }
