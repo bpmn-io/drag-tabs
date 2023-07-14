@@ -9,8 +9,7 @@ import {
 import {
   forEach,
   assign,
-  bind,
-  isNumber
+  bind
 } from 'min-dash';
 
 import createEmitter from 'mitt';
@@ -91,6 +90,7 @@ var DROP_EFFECT = 'move';
  * @param  {String} [options.showPreview=true] whether to show or hide the drag preview
  */
 function DragTabs($el, options) {
+
   // we are an event emitter
   assign(this, createEmitter());
 
@@ -149,12 +149,6 @@ DragTabs.prototype._setDraggable = function() {
   var ignore = this.options.selectors.ignore;
 
   forEach(allTabs, function(tabNode) {
-
-    // PhantomJS issue
-    if (isNumber(tabNode)) {
-      return;
-    }
-
     if (domMatches(tabNode, ignore)) {
       domAttr(tabNode, 'draggable', false);
     } else {

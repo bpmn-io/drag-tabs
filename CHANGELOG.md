@@ -6,6 +6,11 @@ All notable changes to [drag-tabs](https://github.com/bpmn-io/drag-tabs) are doc
 
 ___Note:__ Yet to be released changes appear here._
 
+## 2.3.1
+
+* `DEPS`: use `mitt@3`
+* `DEPS`: update dev dependencies
+
 ## 2.3.0
 
 * `FEAT`: add ability to suppress drag image
