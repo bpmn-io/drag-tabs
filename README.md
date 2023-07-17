@@ -2,11 +2,11 @@
 
 # drag-tabs
 
-[![Build Status](https://travis-ci.com/bpmn-io/drag-tabs.svg?branch=master)](https://travis-ci.com/bpmn-io/drag-tabs)
+[![Build Status](https://github.com/bpmn-io/drag-tabs/actions/workflows/CI.yml/badge.svg)](https://github.com/bpmn-io/drag-tabs/actions/workflows/CI.yml)
 
 A tiny utility that makes tabs inside a container draggable.
 
-<img src="https://raw.githubusercontent.com/bpmn-io/drag-tabs/master/screencast.gif" alt="drag-tabs in action" height="50">
+<img src="https://raw.githubusercontent.com/bpmn-io/drag-tabs/main/screencast.gif" alt="drag-tabs in action" height="50">
 
 
 ## Features
