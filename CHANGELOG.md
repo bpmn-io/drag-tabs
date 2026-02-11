@@ -6,6 +6,12 @@ All notable changes to [drag-tabs](https://github.com/bpmn-io/drag-tabs) are doc
 
 ___Note:__ Yet to be released changes appear here._
 
+## 3.0.0
+
+* `CHORE`: turn into ESM only module
+* `DEPS`: update to `min-dash@5.0.0`
+* `DEPS`: update to `min-dom@5.2.0`
+
 ## 2.3.1
 
 * `DEPS`: use `mitt@3`
