@@ -2,8 +2,12 @@
   "name": "drag-tabs",
   "version": "2.3.1",
   "description": "A tab dragging component",
-  "main": "index.js",
-  "module": "index.js",
+  "type": "module",
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.js",
+    "./package.json": "./package.json"
+  },
   "files": [
     "index.js"
   ],

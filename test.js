@@ -1,4 +1,4 @@
-import dragTabs from '.';
+import dragTabs from 'drag-tabs';
 
 import {
   domify
